@@ -17,23 +17,22 @@ nullset) of the the semiring  `ℕ[G]`, satisfying a bunch of axioms.
 
 -/
 
+variable (G : Type) [Group G]
 open MonoidAlgebra
 structure Tract where
-  group : Type
-  isGroup : Group group
-  nullSet : Set (MonoidAlgebra ℕ group)
+  nullSet : Set (MonoidAlgebra ℕ G)
+  e : G -- the unique additive inverse to the multiplicative identity of G in `ℕ_G`
 
   -- Axiom T1: the zero of the semiring `ℕ[G]` is in the nullset; the identity of `G` is not.
-  zero_mem: 0 ∈ nullSet
-  one_not_mem: ¬ single 1 1 ∈ nullSet
+  zero_mem : 0 ∈ nullSet
+  one_not_mem : ¬ single 1 1 ∈ nullSet
 
   -- Axiom T2: the nullset is closed under multiplication
-  is_closed_mul: ∀ g : group, ∀ x ∈ nullSet, (single g 1) * x ∈ nullSet
+  is_closed_mul: ∀ g : G, ∀ x ∈ nullSet, (single g 1) * x ∈ nullSet
 
   -- Axiom T3: there exists a unique element `ε ∈ G` such that `1 + ε` is in the nullset.
-  one_add_inv: ∃! e : group, ((single 1 1) + single e 1) ∈ nullSet
-
-instance (T : Tract) : Group T.group := T.isGroup
+  e_add_inv : ((single 1 1) + single e 1) ∈ nullSet
+  e_unique : ∀ x ≠ e, single 1 1 + single x 1 ∉ nullSet
 
 /-!
 # Idyll
